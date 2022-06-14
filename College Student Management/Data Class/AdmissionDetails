@@ -1,0 +1,37 @@
+package DataClass;
+
+public class AdmissionDetails {
+    String name;
+    int cutoff;
+    String status;
+
+
+    public AdmissionDetails(String name, int cutoff,String status) {
+        this.name = name;
+        this.cutoff = cutoff;
+        this.status = status;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getCutoff() {
+        return cutoff;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+
+
+    @Override
+    public String toString() {
+        return "DataClass.AdmissionDetails{" +
+                "name='" + name + '\'' +
+                ", cutoff=" + cutoff +
+                ", status='" + status + '\'' +
+                '}';
+    }
+}
