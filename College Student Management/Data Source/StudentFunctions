@@ -234,10 +234,6 @@ public class StudentFunctions {
                 subjectName = str.nextLine();
                 System.out.println("Enter the mark of this subject : ");
                 mark = sc.nextInt();
-                if(mark < 50)
-                {
-                    status = "Arrears";
-                }
                 subjectMarks.put(subjectName,mark);
                 System.out.println(subjectMarks);
             }
@@ -246,7 +242,7 @@ public class StudentFunctions {
 
         }
         PersonalDetails personalDetails = new PersonalDetails(dateOfBirth,gender,cutOffMark, phoneNumber,district);
-        students.add(new Student(id,name,departmentName,year,mailId,status,personalDetails,allSemMarks));
+        students.add(new Student(id,name,departmentName,year,mailId,personalDetails,allSemMarks));
         System.out.println(students);
     }
 
