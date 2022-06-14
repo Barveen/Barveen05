@@ -1,0 +1,132 @@
+package DataClass;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class Student {
+    String rollNumber;
+    String studentName;
+    String departName;
+    int year;
+    String mailId;
+    PersonalDetails personalDetails;
+    HashMap<String,Integer> subjectMarks = new HashMap<>();
+
+    public Student(String rollNumber, String studentName, String departName, int year, String mailId, PersonalDetails personalDetails, Map<Integer, HashMap<String, Integer>> allSemMarks) {
+        this.rollNumber = rollNumber;
+        this.studentName = studentName;
+        this.departName = departName;
+        this.year = year;
+        this.mailId = mailId;
+        this.personalDetails = personalDetails;
+        this.allSemMarks = allSemMarks;
+    }
+
+    Map<Integer,HashMap<String,Integer>> allSemMarks = new HashMap<>();
+
+    @Override
+    public String toString() {
+        return "DataClass.Student{" +
+                "rollNumber='" + rollNumber + '\'' +
+                ", studentName='" + studentName + '\'' +
+                ", departName='" + departName + '\'' +
+                ", year=" + year +
+                ", mailId='" + mailId + '\'' +
+                ", allSemMarks=" + allSemMarks +
+                '}';
+    }
+    public Student()
+    {
+
+    }
+
+    public Student(String id, String name, String departmentName, int year, Map<Integer, HashMap<String, Integer>> allSemMarks)
+    {
+        this.rollNumber = id;
+        this.studentName = name;
+        this.departName = departmentName;
+        this.year = year;
+        this.allSemMarks = allSemMarks;
+    }
+
+    public HashMap<String, Integer> getSubjectMarks() {
+        return subjectMarks;
+    }
+    public Map<Integer, HashMap<String, Integer>> getAllSemMarks() {
+        return allSemMarks;
+    }
+
+    public Student(String rollNumber, String studentName, String departName, int year, HashMap<String, Integer> subjectMarks, Map<Integer, HashMap<String, Integer>> allSemMarks) {
+        this.rollNumber = rollNumber;
+        this.studentName = studentName;
+        this.departName = departName;
+        this.year = year;
+        this.subjectMarks = subjectMarks;
+        this.allSemMarks = allSemMarks;
+    }
+
+
+
+
+    public Student(String rollNumber, String studentName, String departName, int year)
+    {
+        this.rollNumber = rollNumber;
+        this.studentName = studentName;
+        this.departName = departName;
+        this.year = year;
+    }
+
+
+   /* public String toString() {
+        return "DataClass.Student{" +
+                "rollNumber='" + rollNumber + '\'' +
+                ", studentName='" + studentName + '\'' +
+                ", departName='" + departName + '\'' +
+                ", year=" + year +
+                ", semester=" + semester +
+                ", number_of_subjects=" + number_of_subjects +
+                ", mark=" + Arrays.toString(mark) +
+                '}';
+    }*/
+
+    public Student(String rollNumber, String studentName, String departName, int year, int semester, int number_of_subjects, int[] mark) {
+        this.rollNumber = rollNumber;
+        this.studentName = studentName;
+        this.departName = departName;
+        this.year = year;
+    }
+
+    public Student(String id, String name, String departmentName, int year, String mailId, PersonalDetails personalDetails) {
+        this.studentName = name;
+        this.rollNumber = id;
+        this.departName = departmentName;
+        this.year = year;
+        this.mailId = mailId;
+        this.personalDetails = personalDetails;
+    }
+
+    public String getRollNumber() {
+        return rollNumber;
+    }
+
+    public String getStudentName() {
+        return studentName;
+    }
+
+    public String getDepartName() {
+        return departName;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public String getMailId() {
+        return mailId;
+    }
+
+    public PersonalDetails getPersonalDetails() {
+        return personalDetails;
+    }
+
+}
