@@ -1,0 +1,41 @@
+package DataClass;
+
+public class UserDetails {
+ String userName;
+ String userId;
+ String password;
+ String mailId;
+
+    public UserDetails(String userName,String userId, String password, String mailId) {
+        this.userName = userName;
+        this.userId = userId;
+        this.password = password;
+        this.mailId = mailId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getMailId() {
+        return mailId;
+    }
+
+    @Override
+    public String toString() {
+        return "DataClass.UserDetails{" +
+                "userName='" + userName + '\'' +
+                ", userId=" + userId +
+                ", password='" + password + '\'' +
+                ", mailId='" + mailId + '\'' +
+                '}';
+    }
+}
