@@ -1,0 +1,474 @@
+package DataSource;
+
+import DataClass.*;
+
+import java.util.*;
+
+public class StudentFunctions {
+
+    int choice;
+    boolean success = false;
+    static Scanner sc = new Scanner(System.in);
+    static Scanner str = new Scanner(System.in);
+    private static DataSource.StudentFunctions single_instance = null;
+    String password;
+    String name;
+    static long idCounter = 1;
+    static long classInchargeId = 100;
+    static long studentId = 1000;
+    String userId;
+    String mailId;
+    String id;
+    String departmentName, departmentId;
+    String dateOfBirth,subjectName;
+    String gender,status;
+    int cutOffMark, mark;
+    String phoneNumber;
+    String district;
+    List<Student>students = new ArrayList<>();
+    List<AdmissionDetails> admissionDetails = new ArrayList<>();
+    List<Department> departmentList = new ArrayList<>();
+    Map<Integer, HashMap<String,Integer>> allSemMarks = new HashMap<>();
+    int year;
+
+    List<UserDetails> userDetailsList = new ArrayList<>();
+
+
+   public static StudentFunctions getInstance() {
+        // To ensure only one instance is created
+        //a class that has only one instance and provides a global point of access to it
+        if (single_instance == null) {
+            single_instance = new DataSource.StudentFunctions();
+        }
+        return single_instance;
+    }
+
+    public void admin() {
+        System.out.println("""
+                Choose \s
+                 1 for sign up
+                 2 for login\s""");
+        choice = checkIntRange();
+        if(choice == 1)
+        {
+            signup();
+            success = true;
+        }
+        else if(choice == 2)
+        {
+            login();
+            success = true;
+        }
+        if(success)
+        {
+           adminMenuOperation();
+        }
+    }
+
+
+    private void signup() {
+        Scanner userInput = new Scanner(System.in);
+        Scanner userPass = new Scanner(System.in);
+        String passwrd;
+        System.out.println("Enter your user Id : ");
+        userId = userInput.next();
+        for(UserDetails user : userDetailsList)
+        {
+         if(user.getUserId().equalsIgnoreCase(userId))
+         {
+             passwrd = user.getPassword();
+             System.out.println("Enter your Password : ");
+             password = sc.next();
+             isValidPassWord();
+             if(password.equals(passwrd))
+             {
+                 System.out.println("Your successfully logged in");
+             }
+             else
+             {
+                 System.out.println("Your password is wrong , Re-enter the password");
+                 userPass.next();
+             }
+         }
+         else
+         {
+             System.out.println("Your user name is wrong , re enter your user name : ");
+             userInput.next();
+         }
+        }
+    }
+    private void login()
+    {
+        System.out.println("Enter your name : ");
+        name = sc.next();
+        System.out.println("Enter your mailId : ");
+        mailId = checkMailId(sc.next());
+        System.out.println("""
+                Enter\s
+                 1 for Admin
+                 2 for DataClass.Student
+                 3 for Class Incharge""");
+        int type = sc.nextInt();
+        if(type == 1)
+        {
+            userId = createAdminId();
+            System.out.println("Your user Id is : "+userId);
+
+        }else if(type == 2)
+        {
+            userId = createClassInchargeId();
+            System.out.println("Your user Id is : "+userId);
+        }else if(type == 3)
+        {
+            userId = createStudentId();
+            System.out.println("Your user Id is : "+userId);
+        }
+        System.out.println("Enter the password : ");
+        password = sc.next();
+        isValidPassWord();
+        userDetailsList.add(new UserDetails(name,userId,password,mailId));
+        System.out.println("Please sign in and use your account");
+        signup();
+    }
+
+    void logOut() {
+        System.out.println("........Successfully Logged Out.......");
+        Main.menu();
+    }
+
+
+
+    public void student() {
+        System.out.println("""
+                Choose \s
+                 1 for sign up
+                 2 for login\s""");
+        choice = checkIntRange();
+        if(choice == 1)
+        {
+            signup();
+            success = true;
+        }
+        else if(choice == 2)
+        {
+            login();
+            success = true;
+        }
+        if(success)
+        {
+            studentOperation();
+        }
+    }
+
+    
+    public void adminMenuOperation() {
+        System.out.println("Welcome to Admin Menu");
+        boolean on = true;
+
+        while(on) {
+            System.out.println("""
+                    Enter\s
+                    1 for view admission details
+                    2 for Add Departments
+                    3 for Show Departments
+                    4 for Add Students
+                    5 for Assign Class Incharge
+                    6 for Show Class Incharge
+                    7 for View Students Details
+                    8 for Search By StudentId
+                    9 for Search By StudentName
+                    10 for View Students By Year
+                    11 log out""");
+            System.out.println("Enter your choice: ");
+            int choice = sc.nextInt();
+            switch (choice) {
+                case 1 -> viewAdmissionDetails();
+                case 2 -> addDepartments();
+                case 3 -> showDepartments();
+                case 4 -> addStudents();
+                case 5 -> viewFailStudents();
+                case 6 -> viewStudentDetails();
+                case 7 -> searchByStudentId();
+                case 8 -> searchByStudentName();
+                case 9 -> viewStudentDetailsByYear();
+                case 10 -> viewStudentByTheirDepartment();
+                case 11 -> {
+                    logOut();
+                    on = false;
+                }
+
+            }
+        }
+    }
+
+    private void addDepartments() {
+        System.out.println("Enter the departmentId : ");
+        departmentId = sc.next();
+        System.out.println("Enter the DataClass.Department Name : ");
+        departmentName = sc.next();
+        System.out.println("Enter the available seats in this department : ");
+        int availableSeats = sc.nextInt();
+        System.out.println("Enter the cutOff Mark for this department : ");
+        cutOffMark = sc.nextInt();
+        departmentList.add(new Department(departmentId,departmentName,availableSeats,cutOffMark));
+
+    }
+    
+    private  void addStudents()
+    {
+        detailsOfStudents();
+        System.out.println("Enter the student roll Number : ");
+        id = sc.next();
+        System.out.println("Enter the DataClass.Department name : ");
+        departmentName = sc.next();
+        System.out.println("Enter the year of the student : ");
+        year = sc.nextInt();
+        System.out.println("Enter the cutOff mark : ");
+        cutOffMark = sc.nextInt();
+        System.out.println("Enter how many semester you want to enter : ");
+        int sem = sc.nextInt();
+
+        for(int i = 1; i<= sem ; i++)
+        {
+            System.out.println("Enter how many subject in this Semester : ");
+            int sub = sc.nextInt();
+            HashMap<String,Integer> subjectMarks = new HashMap<>();
+            for (int j = 0; j < sub; j++)
+            {
+                System.out.println("Enter the Subject Name : ");
+                subjectName = str.nextLine();
+                System.out.println("Enter the mark of this subject : ");
+                mark = sc.nextInt();
+                subjectMarks.put(subjectName,mark);
+                System.out.println(subjectMarks);
+            }
+            allSemMarks.put(i,subjectMarks);
+        }
+        PersonalDetails personalDetails = new PersonalDetails(dateOfBirth,gender,cutOffMark, phoneNumber,district);
+        students.add(new Student(id,name,departmentName,year,mailId,personalDetails,allSemMarks));
+        System.out.println(students);
+    }
+
+    private void detailsOfStudents() {
+
+        System.out.println("Enter the student name : ");
+        name = str.nextLine();
+        isValidName();
+        System.out.println("Enter the mailId : ");
+        mailId = checkMailId(sc.next());
+        System.out.println("Enter the DOB : ");
+        dateOfBirth = sc.next();
+        System.out.println("Enter the Gender : ");
+        gender = sc.next();
+        System.out.println("Enter the phoneNumber : ");
+        phoneNumber = checkPhoneNumber(sc.next());
+        System.out.println("Enter the district : ");
+        district = sc.next();
+    }
+    public void viewStudentDetails() {
+        for (Student student : students)
+        {
+            System.out.println(student.getRollNumber()+" "+student.getStudentName()+" "+student.getDepartName()+" "+student.getYear()+" "+student.getMailId()+" "+student.getPersonalDetails());
+        }
+    }
+    
+
+    private void showDepartments() {
+        for(Department department : departmentList)
+        {
+            System.out.println(department);
+        }
+    }
+
+    public void viewMarks() {
+        System.out.println("Enter the roll number : ");
+        id = sc.next();
+        System.out.println("Your Marks are : ");
+        for(Student student : students) {
+            if (student.getRollNumber().equalsIgnoreCase(id)) {
+                System.out.println(student.getAllSemMarks());
+            }
+        }
+    }
+
+    void viewTheirDetails() {
+        System.out.println("Enter your Roll Number : ");
+        id = sc.next();
+        for(Student student : students)
+        {
+            if(student.getRollNumber().equalsIgnoreCase(id))
+            System.out.println(student);
+        }
+    }
+
+    public void viewStudentByTheirDepartment()
+    {
+        System.out.println("Enter the department Name to search : ");
+        departmentName = sc.next();
+        for (Student student : students)
+        {
+            if(student.getDepartName().equalsIgnoreCase(departmentName))
+            {
+                System.out.println(student.getRollNumber()+" "+student.getStudentName()+" "+student.getDepartName()+" "+student.getYear());
+            }
+        }
+    }
+    public void viewFailStudents() {
+    }
+    
+    public void viewStudentDetailsByYear() {
+        System.out.println("Enter the year that you want : ");
+        year = sc.nextInt();
+        for(Student student : students)
+        {
+            if(student.getYear() == year)
+            {
+                System.out.println(student.getRollNumber()+" "+student.getStudentName()+" "+student.getDepartName());
+            }
+        }
+   }
+
+    public void searchByStudentName() {
+        System.out.println("Enter the DataClass.Student Name you want to Search : ");
+        name = str.nextLine();
+        isValidName();
+        for(Student student : students)
+        {
+            if(student.getStudentName().equalsIgnoreCase(name))
+            {
+                System.out.println(student);
+            }
+        }
+    }
+
+    public void searchByStudentId() {
+        System.out.println("Enter the DataClass.Student Id you want to search : ");
+        id = sc.next();
+        for(Student student : students)
+        {
+            if(student.getRollNumber().equalsIgnoreCase(id))
+            {
+                System.out.println(student);
+            }
+        }
+    }
+    
+    private void viewAdmissionDetails() {
+        for(AdmissionDetails details : admissionDetails)
+        {
+            System.out.println(details);
+        }
+    }
+    public void studentOperation() {
+        System.out.println("Welcome to DataClass.Student Menu");
+        boolean on = true;
+        while(on) {
+            System.out.println("Enter your choice: ");
+            int choice = sc.nextInt();
+            switch (choice) {
+                case 1 -> viewTheirDetails();
+                case 2 -> viewMarks();
+                case 3 -> {
+                    logOut();
+                    on = false;
+                }
+
+            }
+        }
+    }
+    
+
+
+    public void isValidName() {
+        while (!name.matches("^[a-zA-Z\\s]{3,20}")) {
+            System.out.println("invalid name");
+            name = str.nextLine();
+        }
+    }
+    private static int checkIntRange() {
+        int enteredNum;
+        do {
+            while (!sc.hasNext()) {
+                System.out.println("That is not a number!");
+                sc.nextInt();
+            }
+            enteredNum = sc.nextInt();
+        } while (enteredNum < 1 || enteredNum > 2);
+        return enteredNum;
+    }
+
+
+    public String checkPhoneNumber(String ph_Num) {
+        //Matching the given phone number with the expression
+        while (!ph_Num.matches("(0/91)?[6-9][0-9]{9}")) {
+            System.out.println("Invalid Phone Number");
+            System.out.println("Enter the phone number(Ex: 10- digit, Start's with 7 to 9)");
+            ph_Num = sc.next();
+
+        }
+        return ph_Num;
+    }
+
+    public void isValidPassWord() {
+        while (!password.matches("[a-z A-Z\\\\d+!@#$%^&*()_-]{8}+")) {
+            System.out.println("invalid password");
+            password = sc.nextLine();
+        }
+    }
+
+    public String checkMailId(String eMailId) {
+        while (!eMailId.matches("[A-Za-z0-9]+@[a-zA-Z]+.[a-z]+.*[a-z]*")) {
+            System.out.println("Invalid E-MailId");
+            eMailId = sc.nextLine();
+        }
+        return eMailId;
+    }
+
+
+    public static  String createAdminId()
+    {
+        return String.valueOf(idCounter++);
+    }
+    public static  String createClassInchargeId()
+    {
+        return String.valueOf(classInchargeId++);
+    }
+    public static  String createStudentId()
+    {
+        studentId += 1;
+        return String.valueOf(studentId++);
+    }
+
+    public void newAdmission() {
+        newAdmissiondetails();
+    }
+    public void newAdmissiondetails() {
+        showDepartments();
+        detailsOfStudents();
+        System.out.println("Enter the 12th Physics mark : ");
+        int m1 = sc.nextInt();
+        System.out.println("Enter the 12th Chemistry mark : ");
+        int m2 = sc.nextInt();
+        System.out.println("Enter the 12th Maths mark : ");
+        int m3 = sc.nextInt();
+        cutOffMark = (m1 / 2) + (m2 / 4 ) + (m3 / 4);
+        System.out.println("Enter the department you want : ");
+        departmentName = sc.next();
+        for(Department department : departmentList)
+        {
+            if(department.getDepartmentName().equalsIgnoreCase(departmentName))
+            {
+                if(department.getCutOffMarks() <= cutOffMark)
+                {
+                    System.out.println("You are selected");
+                    status = "Selected";
+                }
+                else
+                {
+                    System.out.println("Sorry , you have low cutoff marks");
+                }
+            }
+        }
+        admissionDetails.add(new AdmissionDetails(name,cutOffMark,status));
+    }
+}
