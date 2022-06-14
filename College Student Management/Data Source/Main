@@ -1,0 +1,53 @@
+package DataSource;
+
+import java.util.Scanner;
+
+public class Main {
+    static Scanner sc = new Scanner(System.in);
+    static void menu() {
+        System.out.println("""
+                1) for Admin
+                2) for New Admission
+                3) for Student
+                4) for Class Incharge
+                5) for menu
+                6) for Exit the program""");
+    }
+
+    public static void main(String[] args) {
+        boolean main = true;
+        int choice;
+        StudentFunctions object = StudentFunctions.getInstance();
+        menu();
+        while (main) {
+            System.out.println("Enter your choice : ");
+            choice = checkIntRange();
+            switch (choice) {
+                case 1 -> object.admin();
+                case 2 -> object.newAdmission();
+                case 3 -> object.student();
+                case 4 -> menu();
+                case 5-> {
+
+                    System.out.println("Program finished");
+                    main = false;
+                }
+                default -> System.out.println("You enter the wrong number");
+
+            }
+        }
+    }
+
+    private static int checkIntRange() {
+        int enteredNum;
+        do {
+            while (!sc.hasNext()) {
+                System.out.println("That is not a number!");
+                sc.nextInt();
+            }
+            enteredNum = sc.nextInt();
+        } while (enteredNum < 1 || enteredNum > 5);
+        return enteredNum;
+    }
+}
+
