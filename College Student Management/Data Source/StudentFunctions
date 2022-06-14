@@ -1,9 +1,7 @@
 package DataSource;
 
 import DataClass.*;
-
 import java.util.*;
-
 public class StudentFunctions {
 
     int choice;
@@ -28,13 +26,10 @@ public class StudentFunctions {
     List<Student>students = new ArrayList<>();
     List<AdmissionDetails> admissionDetails = new ArrayList<>();
     List<Department> departmentList = new ArrayList<>();
-    Map<Integer, HashMap<String,Integer>> allSemMarks = new HashMap<>();
+    List<UserDetails> userDetailsList = new ArrayList<>();
     int year;
 
-    List<UserDetails> userDetailsList = new ArrayList<>();
-
-
-   public static StudentFunctions getInstance() {
+    public static StudentFunctions getInstance() {
         // To ensure only one instance is created
         //a class that has only one instance and provides a global point of access to it
         if (single_instance == null) {
@@ -116,7 +111,7 @@ public class StudentFunctions {
 
         }else if(type == 2)
         {
-            userId = createClassInchargeId();
+            userId = createNewAdmissionId();
             System.out.println("Your user Id is : "+userId);
         }else if(type == 3)
         {
@@ -160,7 +155,7 @@ public class StudentFunctions {
         }
     }
 
-    
+
     public void adminMenuOperation() {
         System.out.println("Welcome to Admin Menu");
         boolean on = true;
@@ -213,7 +208,7 @@ public class StudentFunctions {
         departmentList.add(new Department(departmentId,departmentName,availableSeats,cutOffMark));
 
     }
-    
+
     private  void addStudents()
     {
         detailsOfStudents();
@@ -227,7 +222,7 @@ public class StudentFunctions {
         cutOffMark = sc.nextInt();
         System.out.println("Enter how many semester you want to enter : ");
         int sem = sc.nextInt();
-
+        HashMap<Integer, HashMap<String,Integer>> allSemMarks = new HashMap<>();
         for(int i = 1; i<= sem ; i++)
         {
             System.out.println("Enter how many subject in this Semester : ");
@@ -239,15 +234,22 @@ public class StudentFunctions {
                 subjectName = str.nextLine();
                 System.out.println("Enter the mark of this subject : ");
                 mark = sc.nextInt();
+                if(mark < 50)
+                {
+                    status = "Arrears";
+                }
                 subjectMarks.put(subjectName,mark);
                 System.out.println(subjectMarks);
             }
             allSemMarks.put(i,subjectMarks);
+
+
         }
         PersonalDetails personalDetails = new PersonalDetails(dateOfBirth,gender,cutOffMark, phoneNumber,district);
-        students.add(new Student(id,name,departmentName,year,mailId,personalDetails,allSemMarks));
+        students.add(new Student(id,name,departmentName,year,mailId,status,personalDetails,allSemMarks));
         System.out.println(students);
     }
+
 
     private void detailsOfStudents() {
 
@@ -271,23 +273,12 @@ public class StudentFunctions {
             System.out.println(student.getRollNumber()+" "+student.getStudentName()+" "+student.getDepartName()+" "+student.getYear()+" "+student.getMailId()+" "+student.getPersonalDetails());
         }
     }
-    
+
 
     private void showDepartments() {
         for(Department department : departmentList)
         {
             System.out.println(department);
-        }
-    }
-
-    public void viewMarks() {
-        System.out.println("Enter the roll number : ");
-        id = sc.next();
-        System.out.println("Your Marks are : ");
-        for(Student student : students) {
-            if (student.getRollNumber().equalsIgnoreCase(id)) {
-                System.out.println(student.getAllSemMarks());
-            }
         }
     }
 
@@ -313,9 +304,46 @@ public class StudentFunctions {
             }
         }
     }
-    public void viewFailStudents() {
+
+    public void viewMarks() {
+        System.out.println("Enter the roll number : ");
+        id = sc.next();
+        System.out.println("Your Marks are : ");
+        for(Student student : students) {
+            if (student.getRollNumber().equalsIgnoreCase(id)) {
+                System.out.println(student.getAllSemMarks());
+            }
+        }
     }
-    
+
+    public void viewFailStudents() {
+            int failMark = 50;
+        System.out.println("Enter the department name: ");
+        departmentName = sc.next();
+        System.out.println("Enter the year : ");
+        year = sc.nextInt();
+            //for(HashMap<String, Integer> value: student.getAllSemMarks().values()){
+            for(Student student : students) {
+                if(student.getDepartName().equalsIgnoreCase(departmentName) && student.getYear() == year)
+                {
+                    System.out.println("Enter the subject to check : ");
+                    subjectName = sc.next();
+                HashMap<Integer,HashMap<String,Integer>>temp;
+                temp=student.getAllSemMarks();
+                for( int i  :temp.keySet()) {
+                    HashMap<String, Integer> s;
+                    s = temp.get(i);
+                    int a = s.get(subjectName);
+                    if (a <= failMark) {
+                        System.out.println("e");
+                        System.out.println(student);
+                    } else {
+                        break;
+                    }
+                }
+                }
+        }
+    }
     public void viewStudentDetailsByYear() {
         System.out.println("Enter the year that you want : ");
         year = sc.nextInt();
@@ -352,7 +380,7 @@ public class StudentFunctions {
             }
         }
     }
-    
+
     private void viewAdmissionDetails() {
         for(AdmissionDetails details : admissionDetails)
         {
@@ -376,7 +404,7 @@ public class StudentFunctions {
             }
         }
     }
-    
+
 
 
     public void isValidName() {
@@ -429,7 +457,7 @@ public class StudentFunctions {
     {
         return String.valueOf(idCounter++);
     }
-    public static  String createClassInchargeId()
+    public static  String createNewAdmissionId()
     {
         return String.valueOf(classInchargeId++);
     }
@@ -440,7 +468,25 @@ public class StudentFunctions {
     }
 
     public void newAdmission() {
-        newAdmissiondetails();
+        System.out.println("""
+                Choose \s
+                 1 for sign up
+                 2 for login\s""");
+        choice = checkIntRange();
+        if(choice == 1)
+        {
+            signup();
+            success = true;
+        }
+        else if(choice == 2)
+        {
+            login();
+            success = true;
+        }
+        if(success)
+        {
+            newAdmissiondetails();
+        }
     }
     public void newAdmissiondetails() {
         showDepartments();
@@ -472,3 +518,7 @@ public class StudentFunctions {
         admissionDetails.add(new AdmissionDetails(name,cutOffMark,status));
     }
 }
+//student.getAllSemMarks().entrySet().stream()
+//                   .filter(entry -> entry.getValue() < 50)
+//                   .map(Map.Entry::getKey)
+//                   .collect(Collectors.toList());
