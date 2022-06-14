@@ -1,0 +1,48 @@
+package DataClass;
+
+public class PersonalDetails{
+    String dateOfBirth;
+    String gender;
+    int cutOffMark;
+    String phoneNumber;
+    String district;
+
+    public PersonalDetails(String dateOfBirth, String gender, int cutOffMark, String phoneNumber, String district) {
+        this.dateOfBirth = dateOfBirth;
+        this.gender = gender;
+        this.cutOffMark = cutOffMark;
+        this.phoneNumber = phoneNumber;
+        this.district = district;
+    }
+
+    public String getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public int getCutOffMark() {
+        return cutOffMark;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public String getDistrict() {
+        return district;
+    }
+
+    @Override
+    public String toString() {
+        return "DataClass.PersonalDetails{" +
+                "dateOfBirth='" + dateOfBirth + '\'' +
+                ", gender='" + gender + '\'' +
+                ", cutOffMark='" + cutOffMark + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", district='" + district + '\'' +
+                '}';
+    }
+}
