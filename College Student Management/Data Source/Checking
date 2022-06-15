@@ -1,0 +1,130 @@
+package DataSource;
+
+import java.util.Scanner;
+
+import static DataSource.Main.sc;
+
+
+
+public  class Checking {
+
+    static Scanner str = new Scanner(System.in);
+
+    public  String isValidName(String name) {
+        while (!name.matches("^[a-zA-Z\\s]{3,20}")) {
+            System.out.println("invalid name");
+            name = str.nextLine();
+        }
+        return name;
+    }
+
+    public String checkPhoneNumber(String ph_Num) {
+        //Matching the given phone number with the expression
+        while (!ph_Num.matches("(0/91)?[6-9][0-9]{9}")) {
+            System.out.println("Invalid Phone Number");
+            System.out.println("Enter the phone number(Ex: 10- digit, Start's with 7 to 9)");
+            ph_Num = sc.next();
+
+        }
+        return ph_Num;
+    }
+
+    public String checkDOB(String dateOfBirth) {
+        while (!dateOfBirth.matches("^(1[0-2]|0[1-9])/(3[01]|[12][0-9]|0[1-9])/[0-9]{4}$")) {
+            System.out.println("Invalid Date of Birth");
+            dateOfBirth = sc.next();
+        }
+        return dateOfBirth;
+    }
+
+    public String checkGender(String gender)
+    {
+        while(!gender.matches("Male|Female|Others"))
+        {
+            System.out.println("Invalid Gender");
+            gender = sc.next();
+        }
+        return gender;
+    }
+
+    public String checkMailId(String eMailId) {
+        while (!eMailId.matches("[A-Za-z0-9]+@[a-zA-Z]+.[a-z]+.*[a-z]*")) {
+            System.out.println("Invalid E-MailId");
+            eMailId = sc.nextLine();
+        }
+        return eMailId;
+    }
+
+    public String isValidPassWord(String password) {
+        while (!password.matches("[a-z A-Z0-9\\\\d+!@#$%^&*()_-]{8}+")) {
+            System.out.println("invalid password");
+            password = sc.nextLine();
+        }
+        return password;
+    }
+
+    public int checkIntRange() {
+        int enteredNum;
+        do {
+            while (!sc.hasNext()) {
+                System.out.println("That is not a number!");
+                sc.next();
+            }
+            enteredNum = sc.nextInt();
+        } while (enteredNum < 1 || enteredNum > 2);
+
+        return enteredNum;
+    }
+
+    public int checkIntRangeAdmin() {
+        int enteredNum;
+        do {
+            while (!sc.hasNext()) {
+                System.out.println("That is not a number!");
+                sc.next();
+            }
+            enteredNum = sc.nextInt();
+        } while (enteredNum < 1 || enteredNum > 11);
+
+        return enteredNum;
+    }
+
+    public int checkIntRangeStudent() {
+        int enteredNum;
+        do {
+            while (!sc.hasNext()) {
+                System.out.println("That is not a number!");
+                sc.next();
+            }
+            enteredNum = sc.nextInt();
+        } while (enteredNum < 1 || enteredNum > 3);
+
+        return enteredNum;
+    }
+
+    public int checkIntRangeNewAdmission() {
+        int enteredNum;
+        do {
+            while (!sc.hasNext()) {
+                System.out.println("That is not a number!");
+                sc.next();
+            }
+            enteredNum = sc.nextInt();
+        } while (enteredNum < 1 || enteredNum > 3);
+
+        return enteredNum;
+    }
+
+    public int checkIntRangeMain() {
+        int enteredNum;
+        do {
+            while (!sc.hasNextInt()) {
+                System.out.println("That is not a number!");
+                sc.next();
+
+            }
+            enteredNum = sc.nextInt();
+        } while (enteredNum < 1 || enteredNum > 5);
+        return enteredNum;
+    }
+}
