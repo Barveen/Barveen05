@@ -9,19 +9,19 @@ public class Main {
                 1) for Admin
                 2) for New Admission
                 3) for Student
-                4) for Class Incharge
-                5) for menu
-                6) for Exit the program""");
+                4) for menu
+                5) for Exit the program""");
     }
 
     public static void main(String[] args) {
         boolean main = true;
         int choice;
         StudentFunctions object = StudentFunctions.getInstance();
+        Checking check = new Checking();
         menu();
         while (main) {
             System.out.println("Enter your choice : ");
-            choice = checkIntRange();
+            choice = check.checkIntRangeMain();
             switch (choice) {
                 case 1 -> object.admin();
                 case 2 -> object.newAdmission();
@@ -38,16 +38,5 @@ public class Main {
         }
     }
 
-    private static int checkIntRange() {
-        int enteredNum;
-        do {
-            while (!sc.hasNext()) {
-                System.out.println("That is not a number!");
-                sc.nextInt();
-            }
-            enteredNum = sc.nextInt();
-        } while (enteredNum < 1 || enteredNum > 5);
-        return enteredNum;
-    }
 }
 
