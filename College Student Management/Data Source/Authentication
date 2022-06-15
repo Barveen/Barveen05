@@ -1,0 +1,100 @@
+package DataSource;
+
+import DataClass.UserDetails;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class Authentication {
+    List<UserDetails> userDetailsList = new ArrayList<>();
+    Checking checking = new Checking();
+    Scanner sc = new Scanner(System.in);
+    String userId;
+    String password;
+    String name;
+    String mailId;
+    static long idCounter = 1;
+    static long newAdmissionId = 100;
+    static long studentId = 1000;
+
+    public void signup() {
+        Scanner userInput = new Scanner(System.in);
+        Scanner userPass = new Scanner(System.in);
+        String passwrd;
+        System.out.println("Enter your user Id : ");
+        userId = userInput.next();
+        for(UserDetails user : userDetailsList)
+        {
+            if(user.getUserId().equalsIgnoreCase(userId))
+            {
+                passwrd = user.getPassword();
+                System.out.println("Enter your Password : ");
+                password = checking.isValidPassWord(sc.next());
+                if(password.equals(passwrd))
+                {
+                    System.out.println("Your successfully logged in");
+                }
+                else
+                {
+                    System.out.println("Your password is wrong , Re-enter the password");
+                    userPass.next();
+                }
+            }
+            else
+            {
+                System.out.println("Your user name is wrong , re enter your user name : ");
+                userInput.next();
+            }
+        }
+    }
+    public void login()
+    {
+        System.out.println("Enter your name : ");
+        name = checking.isValidName(sc.next());
+        System.out.println("Enter your mailId : ");
+        mailId = checking.checkMailId(sc.next());
+        System.out.println("""
+                Enter\s
+                 1 for Admin
+                 2 for Student
+                 3 for New Admission""");
+        int type = sc.nextInt();
+        if(type == 1)
+        {
+            userId = createAdminId();
+            System.out.println("Your user Id is : "+userId);
+
+        }else if(type == 2)
+        {
+            userId = createStudentId();
+            System.out.println("Your user Id is : "+userId);
+        }else if(type == 3)
+        {
+            userId = createNewAdmissionId();
+            System.out.println("Your user Id is : "+userId);
+        }
+        System.out.println("Enter the password : ");
+        password = checking.isValidPassWord(sc.next());
+        userDetailsList.add(new UserDetails(name,userId,password,mailId));
+        System.out.println("Please sign in and use your account");
+        signup();
+    }
+
+    void logOut() {
+        System.out.println("........Successfully Logged Out.......");
+        Main.menu();
+    }
+
+    public static  String createAdminId()
+    {
+        return String.valueOf(idCounter++);
+    }
+    public static  String createNewAdmissionId()
+    {
+        return String.valueOf(newAdmissionId++);
+    }
+    public static  String createStudentId()
+    {
+        return String.valueOf(studentId++);
+    }
+}
